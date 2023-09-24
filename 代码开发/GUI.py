@@ -123,9 +123,9 @@ def select_number(number):
         entries[current_selected_cell[0]][current_selected_cell[1]][current_selected_cell[2]].insert(0, str(number))
         current_selected_cell = None
 
-# 例子使用：生成3个数独题目和答案
+# 例子使用：生成9个数独题目和答案
 thread_count = 9
-sudoku_puzzles , sudoku_answers = generate_sudoku_parallel(1, "中等")
+sudoku_puzzles , sudoku_answers = generate_sudoku_parallel(thread_count, "中等")
 
 # 存储界面中的所有Entry
 entries = []
