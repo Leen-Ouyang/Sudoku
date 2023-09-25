@@ -153,3 +153,7 @@ def generate_sudoku_parallel(thread_count, difficulty_level):
     
     return sudoku_puzzles, sudoku_answers
 ```
+
+# 七、协同工作记录
+![线上会议1](/images/a.jpg)
+![线上会议2](/images/b.png)
