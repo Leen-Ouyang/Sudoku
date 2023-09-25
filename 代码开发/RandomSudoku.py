@@ -9,7 +9,7 @@ difficulty_mapping = {
     "地狱":0.9,
 }
 
-default_difficulty_level="简单"
+default_difficulty_level="中等"
 
 #根据难度生成数独题目
 def generate_sudoku_puzzle(difficulty_level):
@@ -42,12 +42,11 @@ def generate_sudoku_parallel(thread_count, difficulty_level):
         sudoku_puzzles, sudoku_answers = zip(*[result.result() for result in results])
     
     return sudoku_puzzles, sudoku_answers
-    #此处生成的题目和答案访问格式：for puzzle in sudoku_puzzles:/for answer in sudoku_answers:
 
-""" thread_count = 9
+thread_count = 9
 sudoku_puzzles, sudoku_answers = generate_sudoku_parallel(thread_count, "地狱")
 
-print("生成的数独题目：")
+""" print("生成的数独题目：")
 for puzzle in sudoku_puzzles:
     print(puzzle)
     print("-----")

@@ -1,5 +1,6 @@
 import tkinter as tk
-from tkinter import ttk
+import ttkbootstrap as ttk
+from ttkbootstrap.constants import *
 from tkinter import messagebox
 from functools import partial
 from RandomSudoku import generate_sudoku_parallel
@@ -97,18 +98,23 @@ def generate_interface(thread_count):
             button = tk.Button(number_frame, text=str(button_number), width=8, command=partial(select_number, button_number))
             button.grid(row=i + 1, column=j, padx=5, pady=5)
 
+    # 添加显示答案按钮
+    show_answer_button = tk.Button(number_frame, text="显示答案", width=8, command=show_answer)
+    show_answer_button.grid(row=4, column=0, columnspan=3, padx=5, pady=5)
+
     root.mainloop()
 
 # 函数：切换难度
 def change_difficulty(difficulty, thread_count):
     global current_difficulty
     global sudoku_puzzles
+    global sudoku_answers
 
     current_difficulty = difficulty
     # 生成新的数独题目
     global current_thread
     current_thread = notebook.index(notebook.select())
-    sudoku_puzzles[current_thread], _ = generate_sudoku_parallel(thread_count, difficulty)
+    sudoku_puzzles , sudoku_answers = generate_sudoku_parallel(thread_count, difficulty)
     # 更新数独显示
     switch_sudoku(None)
     messagebox.showinfo("提示", f"已切换难度为 {difficulty}")
@@ -122,6 +128,29 @@ def select_number(number):
         entries[current_selected_cell[0]][current_selected_cell[1]][current_selected_cell[2]].delete(0, tk.END)
         entries[current_selected_cell[0]][current_selected_cell[1]][current_selected_cell[2]].insert(0, str(number))
         current_selected_cell = None
+
+#显示答案
+def show_answer_grid(answer):
+    answer_window = tk.Toplevel()
+    answer_window.title("答案")
+
+    for i in range(9):
+        for j in range(9):
+            entry = tk.Entry(answer_window, width=2, font=("Arial", 18), justify="center", bd=2, relief="solid")
+            entry.grid(row=i, column=j)
+            entry.insert(0, str(answer[i][j]))
+            entry.configure(state='readonly')  
+
+def show_answer():
+    global current_thread
+
+    # 获取当前选定的数独索引
+    idx = int(notebook.index(notebook.select()))
+
+    # 确保该数独索引有答案
+    if sudoku_answers and len(sudoku_answers) > idx:
+        answer = sudoku_answers[idx]
+        show_answer_grid(answer)
 
 # 例子使用：生成9个数独题目和答案
 thread_count = 9
