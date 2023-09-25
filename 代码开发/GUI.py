@@ -102,6 +102,13 @@ def generate_interface(thread_count):
     show_answer_button = tk.Button(number_frame, text="显示答案", width=8, command=show_answer)
     show_answer_button.grid(row=4, column=0, columnspan=3, padx=5, pady=5)
 
+    # 设置初始非空白格子为灰色背景
+    for i in range(thread_count):
+        for row in range(9):
+            for col in range(9):
+                if sudoku_puzzles[i][row][col] != 0:
+                    entries[i][row][col].config(bg='gray')
+
     root.mainloop()
 
 # 函数：切换难度
