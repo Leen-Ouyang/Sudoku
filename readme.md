@@ -5,3 +5,5 @@ pip install sudokum
 
 ```
 
+# 启动程序
+运行`GUI.py`，开始游戏
