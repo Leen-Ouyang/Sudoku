@@ -33,10 +33,22 @@ def highlight_cell(row, col):
     entries[current_thread][row][col].config(bg='yellow')
     current_selected_cell = (current_thread, row, col)
 
+# 用于更新非空白格子的背景色
+def update_gray_cells(thread_idx):
+    for row in range(9):
+        for col in range(9):
+            if sudoku_puzzles[thread_idx][row][col] != 0:
+                entries[thread_idx][row][col].config(bg='gray')
+
+def init_white_cells(thread_idx):
+    for row in range(9):
+        for col in range(9):
+            entries[thread_idx][row][col].config(bg='white')
+
 # 生成界面
 def generate_interface(thread_count):
     global notebook
-    global entries  
+    global entries
     global current_thread
     global current_selected_cell
 
@@ -49,8 +61,8 @@ def generate_interface(thread_count):
 
     for i in range(thread_count):
         frame = ttk.Frame(notebook)
-        notebook.add(frame, text=f"Puzzle{i+1}")
-        
+        notebook.add(frame, text=f"Puzzle{i + 1}")
+
         # 为存储 Entry 对象的子列表初始化为空列表
         entry_row = []
         for row in range(9):
@@ -60,7 +72,7 @@ def generate_interface(thread_count):
                 entry.grid(row=row, column=col)
                 entry.bind('<Button-1>', lambda e, row=row, col=col: highlight_cell(row, col))
                 entry_row[row].append(entry)
-        
+
         # 将 Entry 对象列表添加到 entries
         entries.append(entry_row)
 
@@ -83,8 +95,9 @@ def generate_interface(thread_count):
     # 难度选择按钮
     difficulty_buttons = {}
     for idx, difficulty in enumerate(["新手", "简单", "中等", "困难", "地狱"]):
-        difficulty_buttons[difficulty] = tk.Button(difficulty_frame, text=difficulty, width=8, command=partial(change_difficulty, difficulty, thread_count))
-        difficulty_buttons[difficulty].grid(row=1 + idx//3, column=idx%3, padx=5, pady=5)
+        difficulty_buttons[difficulty] = tk.Button(difficulty_frame, text=difficulty, width=8,
+                                                   command=partial(change_difficulty, difficulty, thread_count))
+        difficulty_buttons[difficulty].grid(row=1 + idx // 3, column=idx % 3, padx=5, pady=5)
 
     # 数字选择部分
     number_frame = ttk.Frame(root)
@@ -102,13 +115,7 @@ def generate_interface(thread_count):
     show_answer_button = tk.Button(number_frame, text="显示答案", width=8, command=show_answer)
     show_answer_button.grid(row=4, column=0, columnspan=3, padx=5, pady=5)
 
-    # 设置初始非空白格子为灰色背景
-    for i in range(thread_count):
-        for row in range(9):
-            for col in range(9):
-                if sudoku_puzzles[i][row][col] != 0:
-                    entries[i][row][col].config(bg='gray')
-
+    update_gray_cells(current_thread)
     root.mainloop()
 
 # 函数：切换难度
@@ -125,6 +132,9 @@ def change_difficulty(difficulty, thread_count):
     # 更新数独显示
     switch_sudoku(None)
     messagebox.showinfo("提示", f"已切换难度为 {difficulty}")
+    # 更新非空白格子的背景色
+    init_white_cells(current_thread)
+    update_gray_cells(current_thread)
 
 # 函数：选择数字
 def select_number(number):
